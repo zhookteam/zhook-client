@@ -1,0 +1,33 @@
+{
+  "name": "hookr-client-sdk-examples",
+  "version": "1.0.0",
+  "description": "Examples for the hookR Client SDK",
+  "type": "module",
+  "scripts": {
+    "basic": "node basic-usage.js",
+    "express": "node express-integration.js",
+    "hooks": "node hook-management.js",
+    "hooks:bulk": "node hook-management.js bulk",
+    "typescript": "ts-node typescript-example.ts",
+    "error-handling": "node error-handling.js",
+    "setup": "npm install express typescript ts-node @types/node dotenv"
+  },
+  "dependencies": {
+    "hookr-client-sdk": "file:.."
+  },
+  "devDependencies": {
+    "express": "^4.18.2",
+    "typescript": "^5.3.2",
+    "ts-node": "^10.9.1",
+    "@types/node": "^20.10.0",
+    "dotenv": "^16.3.1"
+  },
+  "keywords": [
+    "hookr",
+    "webhook",
+    "examples",
+    "sdk"
+  ],
+  "author": "hookR Team",
+  "license": "MIT"
+}
