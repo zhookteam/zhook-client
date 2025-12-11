@@ -10,40 +10,58 @@ const program = new Command();
 
 program
   .name('hookr')
-  .description(`Quick webhook listener via WebSocket - ${WEBSITE_CONFIG.FREE_FOR_DEVELOPERS_MESSAGE}`)
-  .version('1.2.0');
+  .description(
+    `Quick webhook listener via WebSocket - ${WEBSITE_CONFIG.FREE_FOR_DEVELOPERS_MESSAGE}`
+  )
+  .version('1.3.0');
 
 program
   .command('listen')
-  .description(`Listen for incoming webhooks via hookR WebSocket. Get your free client key at ${WEBSITE_CONFIG.URL}`)
+  .description(
+    `Listen for incoming webhooks via hookR WebSocket. Get your free client key at ${WEBSITE_CONFIG.URL}`
+  )
   .option('-f, --format <format>', 'Output format (json|pretty)', 'pretty')
   .option('--save', 'Save requests to automatically named log file')
   .option('--url <url>', 'hookR service URL', 'wss://web.hookr.cloud/events')
-  .argument('<client-key>', `Your hookR client API key (get one free at ${WEBSITE_CONFIG.URL})`)
+  .argument(
+    '<client-key>',
+    `Your hookR client API key (get one free at ${WEBSITE_CONFIG.URL})`
+  )
   .action(async (clientKey, options) => {
     // Validate client key is provided
-    if (!clientKey || typeof clientKey !== 'string' || clientKey.trim().length === 0) {
+    if (
+      !clientKey ||
+      typeof clientKey !== 'string' ||
+      clientKey.trim().length === 0
+    ) {
       console.log(chalk.red('❌ Error: ' + WebsiteMessages.missingClientKey()));
       process.exit(1);
     }
-    
+
     await listenToHookrService(clientKey, options);
   });
 
 // Add custom help text with website information
-program.addHelpText('after', `
+program.addHelpText(
+  'after',
+  `
 Examples:
   $ hookr listen your-client-key
   $ hookr listen your-client-key --format json --save
 
 ${WEBSITE_CONFIG.FREE_FOR_DEVELOPERS_MESSAGE}
 ${WEBSITE_CONFIG.GENERAL_HELP_MESSAGE}
-`);
+`
+);
 
 // Override version command to include website information
-program.version('1.2.0', '-v, --version', `output the current version
+program.version(
+  '1.3.0',
+  '-v, --version',
+  `output the current version
 
-${WEBSITE_CONFIG.GENERAL_HELP_MESSAGE}`);
+${WEBSITE_CONFIG.GENERAL_HELP_MESSAGE}`
+);
 
 async function listenToHookrService(clientKey: string, options: any) {
   console.log(chalk.blue('🎣 Connecting to hookR service...'));
@@ -164,10 +182,14 @@ async function listenToHookrService(clientKey: string, options: any) {
     process.stdin.resume();
   } catch (error: any) {
     // Check if this is an authentication error
-    if (error.message.toLowerCase().includes('auth') || 
-        error.message.toLowerCase().includes('invalid') ||
-        error.message.toLowerCase().includes('unauthorized')) {
-      console.log(chalk.red('❌ ' + WebsiteMessages.authenticationFailed(error.message)));
+    if (
+      error.message.toLowerCase().includes('auth') ||
+      error.message.toLowerCase().includes('invalid') ||
+      error.message.toLowerCase().includes('unauthorized')
+    ) {
+      console.log(
+        chalk.red('❌ ' + WebsiteMessages.authenticationFailed(error.message))
+      );
     } else {
       console.log(chalk.red('❌ Failed to connect:'), error.message);
       console.log(chalk.gray(WEBSITE_CONFIG.GENERAL_HELP_MESSAGE));

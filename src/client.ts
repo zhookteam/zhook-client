@@ -86,11 +86,15 @@ export class HookRClient {
    */
   private validateClientKey(clientKey: string): void {
     if (!clientKey || typeof clientKey !== 'string') {
-      throw new Error(`Client key is required and must be a non-empty string. ${WEBSITE_CONFIG.SIGNUP_MESSAGE}`);
+      throw new Error(
+        `Client key is required and must be a non-empty string. ${WEBSITE_CONFIG.SIGNUP_MESSAGE}`
+      );
     }
 
     if (clientKey.trim().length === 0) {
-      throw new Error(`Client key cannot be empty or whitespace only. ${WEBSITE_CONFIG.SIGNUP_MESSAGE}`);
+      throw new Error(
+        `Client key cannot be empty or whitespace only. ${WEBSITE_CONFIG.SIGNUP_MESSAGE}`
+      );
     }
 
     // Basic format validation - should be a reasonable length
@@ -565,7 +569,12 @@ export class HookRClient {
     this.clientId = null;
 
     // Check if this is an authentication error
-    if (code === 1008 || code === 4001 || reason.toLowerCase().includes('auth') || reason.toLowerCase().includes('invalid')) {
+    if (
+      code === 1008 ||
+      code === 4001 ||
+      reason.toLowerCase().includes('auth') ||
+      reason.toLowerCase().includes('invalid')
+    ) {
       const authError = new Error(WebsiteMessages.authenticationFailed(reason));
       this.log('error', '🔐 Authentication error - will not reconnect', {
         code,
@@ -848,7 +857,7 @@ export class HookRClient {
         }
 
         let enhancedErrorMessage = `API request failed (${response.status}): ${errorMessage}`;
-        
+
         // Add website references for authentication/authorization errors
         if (response.status === 401) {
           enhancedErrorMessage += `. ${WEBSITE_CONFIG.AUTH_VERIFICATION_MESSAGE}`;
