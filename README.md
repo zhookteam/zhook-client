@@ -6,6 +6,8 @@
 
 Official JavaScript/TypeScript client for the hookR webhook service. The client handles WebSocket connections for real-time event delivery, REST API interactions for hook management, and includes comprehensive error handling with automatic reconnection capabilities.
 
+**🎉 hookR is free for developers!** Get your client key at [https://hookr.cloud](https://hookr.cloud) and start receiving webhooks in seconds.
+
 ## Features
 
 - 🔌 **Real-time WebSocket connections** with automatic reconnection
@@ -16,6 +18,14 @@ Official JavaScript/TypeScript client for the hookR webhook service. The client 
 - 📦 **Dual module support** (CommonJS and ES modules)
 - 🔷 **Full TypeScript support** with complete type definitions
 - 🎯 **Node.js 16+** compatibility
+
+## Getting Started
+
+hookR is **free for developers** - no credit card required! Simply:
+
+1. **Start** Get your free client key at [https://hookr.cloud](https://hookr.cloud)
+2. **Install** the client library
+3. **Receive** receiving webhooks instantly
 
 ## Installation
 
@@ -28,7 +38,7 @@ npm install @hookr/client
 ```javascript
 import { HookRClient } from '@hookr/client';
 
-// Create a new client instance
+// Create a new client instance with your free client key from https://hookr.cloud
 const client = new HookRClient('your-client-key');
 
 // Register an event handler
@@ -53,12 +63,20 @@ npm install -g @hookr/client
 
 ### Usage
 
+Get your free client key at [https://hookr.cloud](https://hookr.cloud), then:
+
 ```bash
 # Listen for webhooks in real-time
 hookr listen your-client-key
 
 # Use JSON output format
 hookr listen your-client-key --format json
+
+# Save webhooks to automatically named log file
+hookr listen your-client-key --save
+
+# Combine file logging with pretty console output
+hookr listen your-client-key --save --format pretty
 
 # Connect to custom hookR instance
 hookr listen your-client-key --url wss://your-instance.com/events
@@ -70,6 +88,8 @@ hookr listen your-client-key --url wss://your-instance.com/events
 🎣 Connecting to hookR service...
    Client Key: abc123...
    Service URL: wss://web.hookr.cloud/events
+
+📁 Logging events to: hookr-logs-2025-12-11T14-32-15-123Z.json
 
 ✅ Connected to hookR service
 Waiting for webhook events...
@@ -86,21 +106,69 @@ Press Ctrl+C to stop
        "email": "user@example.com"
      }
    }
+
+👋 Shutting down...
+📊 Total events logged: 5
 ```
+
+### File Logging
+
+The CLI can automatically save all incoming webhook events to timestamped log files:
+
+```bash
+# Enable automatic file logging
+hookr listen your-client-key --save
+```
+
+When using `--save`, the CLI will:
+- 📁 **Auto-generate filenames** like `hookr-logs-2025-12-11T14-32-15-123Z.json`
+- 📝 **Save in JSONL format** (one JSON event per line)
+- 🔄 **Work with any output format** (`--format pretty` or `--format json`)
+- 📊 **Show total events logged** when you exit with Ctrl+C
+
+**Example log file content:**
+```json
+{"timestamp":"2025-12-11T14:32:15.123Z","eventId":"evt_abc123","hookId":"hook_xyz789","receivedAt":"2025-12-11T14:32:15.000Z","payload":{"event":"user.created","data":{"id":"user_123"}}}
+{"timestamp":"2025-12-11T14:32:20.456Z","eventId":"evt_def456","hookId":"hook_xyz789","receivedAt":"2025-12-11T14:32:20.000Z","payload":{"event":"order.completed","data":{"orderId":"order_789"}}}
+```
+
+The JSONL format makes it easy to process with tools like `jq`:
+```bash
+# Count total events
+cat hookr-logs-*.json | wc -l
+
+# Filter events by type
+cat hookr-logs-*.json | jq 'select(.payload.event == "user.created")'
+
+# Extract all payloads
+cat hookr-logs-*.json | jq '.payload'
+```
+
+### CLI Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--format <format>` | Output format (`json` or `pretty`) | `pretty` |
+| `--save` | Save events to automatically named log file | `false` |
+| `--url <url>` | hookR service WebSocket URL | `wss://web.hookr.cloud/events` |
 
 The CLI tool is perfect for:
 - 🧪 **Testing webhook connections** during development
 - 🔍 **Debugging webhook payloads** in real-time  
 - 🚀 **Quick validation** of your hookR setup
 - 📊 **Monitoring webhook traffic** from the terminal
+- 💾 **Logging webhook events** for offline analysis
 
 ## Usage
 
 ### Basic Connection
 
+First, get your free client key at [https://hookr.cloud](https://hookr.cloud):
+
 ```javascript
 import { HookRClient } from '@hookr/client';
 
+// Use your free client key from https://hookr.cloud
 const client = new HookRClient('your-client-key', {
   // Optional configuration
   wsUrl: 'wss://your-hookr-instance.com/events',
@@ -175,7 +243,7 @@ try {
   await client.connect();
 } catch (error) {
   if (error.message.includes('authentication')) {
-    console.error('Invalid client key');
+    console.error('Invalid client key - visit https://hookr.cloud to manage your API keys');
   } else {
     console.error('Connection error:', error.message);
   }
@@ -253,6 +321,7 @@ import express from 'express';
 import { HookRClient } from '@hookr/client';
 
 const app = express();
+// Get your free client key from https://hookr.cloud
 const client = new HookRClient(process.env.HOOKR_CLIENT_KEY);
 
 client.onHookCalled((event) => {
@@ -276,6 +345,7 @@ app.listen(3000);
 import { HookRClient } from '@hookr/client';
 
 export default async function handler(req, res) {
+  // Get your free client key from https://hookr.cloud
   const client = new HookRClient(process.env.HOOKR_CLIENT_KEY);
   
   try {
@@ -331,7 +401,7 @@ npm run format          # Format code with Prettier
 ## Requirements
 
 - Node.js 16.0.0 or higher
-- A valid hookR client key
+- A valid hookR client key (get yours free at [https://hookr.cloud](https://hookr.cloud))
 
 ## License
 

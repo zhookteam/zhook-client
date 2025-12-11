@@ -6,6 +6,7 @@
  */
 
 export { HookRClient } from './client';
+export { WEBSITE_CONFIG, WebsiteMessages } from './constants';
 export type {
   HookRClientOptions,
   WebhookEvent,

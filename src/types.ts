@@ -48,3 +48,15 @@ export interface Hook extends HookConfig {
   updatedAt: string;
   status: 'active' | 'paused' | 'disabled';
 }
+// EventLogger types
+export interface EventLoggerOptions {
+  baseDir?: string;
+}
+
+export interface LoggedEvent {
+  timestamp: string;
+  eventId: string;
+  hookId: string;
+  receivedAt: string;
+  payload: any;
+}
