@@ -31,8 +31,7 @@ export const WEBSITE_CONFIG = {
     'Visit https://zhook.dev to verify your client key',
 
   /** Message for account management */
-  ACCOUNT_MANAGEMENT_MESSAGE:
-    'Visit https://zhook.dev for account management',
+  ACCOUNT_MANAGEMENT_MESSAGE: 'Visit https://zhook.dev for account management',
 } as const;
 
 /**
