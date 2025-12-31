@@ -1,138 +1,138 @@
 /**
- * Core HookRClient class structure tests
+ * Core ZhookClient class structure tests
  * Validates Requirements 2.1, 2.3 - Configuration handling and validation
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { HookRClient } from '../../src/client';
+import { ZhookClient } from '../../src/client';
 
-describe('HookRClient Core Structure', () => {
+describe('ZhookClient Core Structure', () => {
   let consoleSpy: any;
 
   beforeEach(() => {
     // Mock console.log to capture log output
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => { });
   });
 
   describe('Constructor and Configuration', () => {
     it('should create client with valid client key', () => {
-      const client = new HookRClient('valid-client-key-123');
-      expect(client).toBeInstanceOf(HookRClient);
+      const client = new ZhookClient('valid-client-key-123');
+      expect(client).toBeInstanceOf(ZhookClient);
       expect(client.getConnectionState()).toBe('disconnected');
       expect(client.getClientId()).toBeNull();
     });
 
     it('should use default configuration when no options provided', () => {
-      const client = new HookRClient('valid-client-key-123');
+      const client = new ZhookClient('valid-client-key-123');
       const config = client.getConfig();
-      
-      expect(config.wsUrl).toBe('wss://web.hookr.cloud/events');
-      expect(config.apiUrl).toBe('https://web.hookr.cloud/api/v1');
+
+      expect(config.wsUrl).toBe('wss://web.zhook.dev/events');
+      expect(config.apiUrl).toBe('https://web.zhook.dev/api/v1');
       expect(config.maxReconnectAttempts).toBe(10);
       expect(config.reconnectDelay).toBe(1000);
       expect(config.logLevel).toBe('info');
     });
 
     it('should merge custom options with defaults', () => {
-      const client = new HookRClient('valid-client-key-123', {
+      const client = new ZhookClient('valid-client-key-123', {
         wsUrl: 'wss://custom.example.com/events',
         maxReconnectAttempts: 5,
         logLevel: 'debug'
       });
-      
+
       const config = client.getConfig();
       expect(config.wsUrl).toBe('wss://custom.example.com/events');
       expect(config.maxReconnectAttempts).toBe(5);
       expect(config.logLevel).toBe('debug');
       // Defaults should still be used for unspecified options
-      expect(config.apiUrl).toBe('https://web.hookr.cloud/api/v1');
+      expect(config.apiUrl).toBe('https://web.zhook.dev/api/v1');
       expect(config.reconnectDelay).toBe(1000);
     });
 
     it('should validate client key is required', () => {
-      expect(() => new HookRClient('')).toThrow('Client key is required and must be a non-empty string');
-      expect(() => new HookRClient('   ')).toThrow('Client key cannot be empty or whitespace only');
-      expect(() => new HookRClient(null as any)).toThrow('Client key is required and must be a non-empty string');
-      expect(() => new HookRClient(undefined as any)).toThrow('Client key is required and must be a non-empty string');
+      expect(() => new ZhookClient('')).toThrow('Client key is required and must be a non-empty string');
+      expect(() => new ZhookClient('   ')).toThrow('Client key cannot be empty or whitespace only');
+      expect(() => new ZhookClient(null as any)).toThrow('Client key is required and must be a non-empty string');
+      expect(() => new ZhookClient(undefined as any)).toThrow('Client key is required and must be a non-empty string');
     });
 
     it('should validate client key minimum length', () => {
-      expect(() => new HookRClient('short')).toThrow('Client key appears to be too short');
-      expect(() => new HookRClient('1234567890')).not.toThrow(); // Exactly 10 chars should work
+      expect(() => new ZhookClient('short')).toThrow('Client key appears to be too short');
+      expect(() => new ZhookClient('1234567890')).not.toThrow(); // Exactly 10 chars should work
     });
 
     it('should validate WebSocket URL format', () => {
-      expect(() => new HookRClient('valid-key-123', { 
-        wsUrl: 'invalid-url' 
+      expect(() => new ZhookClient('valid-key-123', {
+        wsUrl: 'invalid-url'
       })).toThrow('WebSocket URL is not a valid URL');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        wsUrl: 'http://example.com' 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        wsUrl: 'http://example.com'
       })).toThrow('WebSocket URL must use ws:// or wss:// protocol');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        wsUrl: 'wss://valid.example.com/events' 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        wsUrl: 'wss://valid.example.com/events'
       })).not.toThrow();
     });
 
     it('should validate API URL format', () => {
-      expect(() => new HookRClient('valid-key-123', { 
-        apiUrl: 'invalid-url' 
+      expect(() => new ZhookClient('valid-key-123', {
+        apiUrl: 'invalid-url'
       })).toThrow('API URL is not a valid URL');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        apiUrl: 'ws://example.com' 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        apiUrl: 'ws://example.com'
       })).toThrow('API URL must use http:// or https:// protocol');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        apiUrl: 'https://valid.example.com/api' 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        apiUrl: 'https://valid.example.com/api'
       })).not.toThrow();
     });
 
     it('should validate maxReconnectAttempts', () => {
-      expect(() => new HookRClient('valid-key-123', { 
-        maxReconnectAttempts: -1 
+      expect(() => new ZhookClient('valid-key-123', {
+        maxReconnectAttempts: -1
       })).toThrow('maxReconnectAttempts must be a non-negative integer');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        maxReconnectAttempts: 1.5 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        maxReconnectAttempts: 1.5
       })).toThrow('maxReconnectAttempts must be a non-negative integer');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        maxReconnectAttempts: 0 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        maxReconnectAttempts: 0
       })).not.toThrow();
     });
 
     it('should validate reconnectDelay', () => {
-      expect(() => new HookRClient('valid-key-123', { 
-        reconnectDelay: 50 
+      expect(() => new ZhookClient('valid-key-123', {
+        reconnectDelay: 50
       })).toThrow('reconnectDelay must be an integer >= 100ms');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        reconnectDelay: 1.5 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        reconnectDelay: 1.5
       })).toThrow('reconnectDelay must be an integer >= 100ms');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        reconnectDelay: 100 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        reconnectDelay: 100
       })).not.toThrow();
     });
 
     it('should validate logLevel', () => {
-      expect(() => new HookRClient('valid-key-123', { 
-        logLevel: 'invalid' as any 
+      expect(() => new ZhookClient('valid-key-123', {
+        logLevel: 'invalid' as any
       })).toThrow('logLevel must be one of: silent, error, warn, info, debug');
-      
-      expect(() => new HookRClient('valid-key-123', { 
-        logLevel: 'debug' 
+
+      expect(() => new ZhookClient('valid-key-123', {
+        logLevel: 'debug'
       })).not.toThrow();
     });
   });
 
   describe('State Management', () => {
-    let client: HookRClient;
+    let client: ZhookClient;
 
     beforeEach(() => {
-      client = new HookRClient('valid-client-key-123');
+      client = new ZhookClient('valid-client-key-123');
     });
 
     it('should start in disconnected state', () => {
@@ -161,10 +161,10 @@ describe('HookRClient Core Structure', () => {
   });
 
   describe('Event Handler Management', () => {
-    let client: HookRClient;
+    let client: ZhookClient;
 
     beforeEach(() => {
-      client = new HookRClient('valid-client-key-123', { logLevel: 'silent' });
+      client = new ZhookClient('valid-client-key-123', { logLevel: 'silent' });
     });
 
     it('should register event handlers', () => {
@@ -204,20 +204,20 @@ describe('HookRClient Core Structure', () => {
     it('should respect log levels', () => {
       // Test silent mode
       consoleSpy.mockClear();
-      const silentClient = new HookRClient('valid-key-123', { logLevel: 'silent' });
+      const silentClient = new ZhookClient('valid-key-123', { logLevel: 'silent' });
       expect(consoleSpy).not.toHaveBeenCalled();
-      
+
       // Test debug mode (should log initialization)
       consoleSpy.mockClear();
-      const debugClient = new HookRClient('valid-key-123', { logLevel: 'debug' });
+      const debugClient = new ZhookClient('valid-key-123', { logLevel: 'debug' });
       expect(consoleSpy).toHaveBeenCalled();
     });
 
     it('should include configuration in debug logs', () => {
-      const debugClient = new HookRClient('valid-key-123', { logLevel: 'debug' });
+      const debugClient = new ZhookClient('valid-key-123', { logLevel: 'debug' });
       expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[DEBUG] hookR-client:'),
-        expect.stringContaining('HookRClient initialized'),
+        expect.stringContaining('[DEBUG] zhook-client:'),
+        expect.stringContaining('ZhookClient initialized'),
         expect.objectContaining({
           wsUrl: expect.any(String),
           apiUrl: expect.any(String),
@@ -228,17 +228,17 @@ describe('HookRClient Core Structure', () => {
 
   describe('Configuration Immutability', () => {
     it('should return readonly configuration', () => {
-      const client = new HookRClient('valid-key-123');
+      const client = new ZhookClient('valid-key-123');
       const config = client.getConfig();
-      
+
       // Should not be able to modify the returned config
       expect(() => {
         (config as any).wsUrl = 'modified';
       }).not.toThrow(); // TypeScript prevents this, but runtime doesn't
-      
+
       // But original config should be unchanged
       const newConfig = client.getConfig();
-      expect(newConfig.wsUrl).toBe('wss://web.hookr.cloud/events');
+      expect(newConfig.wsUrl).toBe('wss://web.zhook.dev/events');
     });
   });
 });

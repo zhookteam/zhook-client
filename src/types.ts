@@ -1,10 +1,10 @@
 /**
- * Type definitions for the hookR Client SDK
+ * Type definitions for the Zhook Client SDK
  */
 
 export type LogLevel = 'silent' | 'error' | 'warn' | 'info' | 'debug';
 
-export interface HookRClientOptions {
+export interface ZhookClientOptions {
   wsUrl?: string;
   apiUrl?: string;
   maxReconnectAttempts?: number;

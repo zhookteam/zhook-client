@@ -41,13 +41,13 @@ export class EventLogger {
 
   /**
    * Generates a timestamped filename for log files
-   * Format: hookr-logs-{datetime}.json
-   * Example: hookr-logs-2024-01-15T10-30-00-123Z.json
+   * Format: zhook-logs-{datetime}.json
+   * Example: zhook-logs-2024-01-15T10-30-00-123Z.json
    */
   static generateLogFilename(): string {
     const now = new Date();
     const timestamp = now.toISOString().replace(/[:.]/g, '-');
-    return `hookr-logs-${timestamp}.json`;
+    return `zhook-logs-${timestamp}.json`;
   }
 
   /**

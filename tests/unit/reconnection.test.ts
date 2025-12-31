@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import WebSocket from 'ws';
-import { HookRClient } from '../../src/client';
+import { ZhookClient } from '../../src/client';
 
 // Mock WebSocket
 vi.mock('ws', () => {
@@ -19,17 +19,17 @@ vi.mock('ws', () => {
 });
 
 describe('Automatic Reconnection System', () => {
-  let client: HookRClient;
+  let client: ZhookClient;
   let mockWs: any;
   let consoleSpy: any;
 
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
-    
+
     // Mock console.log to capture log output
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    
+    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => { });
+
     // Create mock WebSocket instance
     mockWs = {
       on: vi.fn(),
@@ -37,11 +37,11 @@ describe('Automatic Reconnection System', () => {
       removeAllListeners: vi.fn(),
       readyState: WebSocket.OPEN,
     };
-    
+
     // Make WebSocket constructor return our mock
     (WebSocket as any).mockImplementation(() => mockWs);
-    
-    client = new HookRClient('valid-client-key-123', { 
+
+    client = new ZhookClient('valid-client-key-123', {
       logLevel: 'silent',
       reconnectDelay: 1000,
       maxReconnectAttempts: 3
@@ -56,11 +56,11 @@ describe('Automatic Reconnection System', () => {
     it('should transition to reconnecting state on disconnection', () => {
       // Test that disconnection triggers reconnecting state
       expect(client.getConnectionState()).toBe('disconnected');
-      
+
       // Simulate the handleDisconnect method being called
       const handleDisconnect = (client as any).handleDisconnect.bind(client);
       handleDisconnect(1000, 'Normal closure');
-      
+
       expect(client.getConnectionState()).toBe('reconnecting');
     });
 
@@ -71,7 +71,7 @@ describe('Automatic Reconnection System', () => {
     });
 
     it('should enforce minimum delay of 100ms', () => {
-      const client = new HookRClient('valid-client-key-123', { 
+      const client = new ZhookClient('valid-client-key-123', {
         logLevel: 'silent',
         reconnectDelay: 100,
         maxReconnectAttempts: 1
@@ -102,7 +102,7 @@ describe('Automatic Reconnection System', () => {
     });
 
     it('should respect maxReconnectAttempts configuration', () => {
-      const client = new HookRClient('valid-client-key-123', { 
+      const client = new ZhookClient('valid-client-key-123', {
         logLevel: 'silent',
         maxReconnectAttempts: 5
       });
@@ -115,22 +115,22 @@ describe('Automatic Reconnection System', () => {
     it('should not reconnect when client is closed', () => {
       client.close();
       expect(client.getConnectionState()).toBe('closed');
-      
+
       // Simulate disconnection on closed client
       const handleDisconnect = (client as any).handleDisconnect.bind(client);
       handleDisconnect(1000, 'Normal closure');
-      
+
       // Should remain closed, not transition to reconnecting
       expect(client.getConnectionState()).toBe('closed');
     });
 
     it('should transition to reconnecting state on normal disconnection', () => {
       expect(client.getConnectionState()).toBe('disconnected');
-      
+
       // Simulate normal disconnection
       const handleDisconnect = (client as any).handleDisconnect.bind(client);
       handleDisconnect(1000, 'Normal closure');
-      
+
       expect(client.getConnectionState()).toBe('reconnecting');
     });
 
@@ -138,7 +138,7 @@ describe('Automatic Reconnection System', () => {
       // Test that resetReconnectionState method exists and works
       const resetMethod = (client as any).resetReconnectionState;
       expect(typeof resetMethod).toBe('function');
-      
+
       // Should not throw when called
       expect(() => resetMethod.call(client)).not.toThrow();
     });

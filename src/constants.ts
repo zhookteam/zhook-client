@@ -1,38 +1,38 @@
 /**
- * Website and messaging constants for the hookR client
+ * Website and messaging constants for the zhook client
  *
  * Centralizes all website URLs and user-facing messages to ensure consistency
  * across the CLI tool, client library, and documentation.
  */
 
 export const WEBSITE_CONFIG = {
-  /** Official hookR website URL */
-  URL: 'https://hookr.cloud',
+  /** Official zhook website URL */
+  URL: 'https://zhook.dev',
 
   /** Message for users who need to sign up for a client key */
-  SIGNUP_MESSAGE: 'Sign up for free at https://hookr.cloud to obtain one',
+  SIGNUP_MESSAGE: 'Sign up for free at https://zhook.dev to obtain one',
 
   /** Message for users who need to manage their API keys */
-  KEY_MANAGEMENT_MESSAGE: 'Visit https://hookr.cloud to manage your API keys',
+  KEY_MANAGEMENT_MESSAGE: 'Visit https://zhook.dev to manage your API keys',
 
   /** General help message with website reference */
-  GENERAL_HELP_MESSAGE: 'For more information, visit https://hookr.cloud',
+  GENERAL_HELP_MESSAGE: 'For more information, visit https://zhook.dev',
 
   /** Professional messaging emphasizing free developer service */
   FREE_FOR_DEVELOPERS_MESSAGE:
-    'hookR is free for developers - get your client key at https://hookr.cloud',
+    'zhook is free for developers - get your client key at https://zhook.dev',
 
   /** Professional signup message for documentation */
   PROFESSIONAL_SIGNUP_MESSAGE:
-    'Get started for free at https://hookr.cloud to obtain your client key',
+    'Get started for free at https://zhook.dev to obtain your client key',
 
   /** Message for authentication verification */
   AUTH_VERIFICATION_MESSAGE:
-    'Visit https://hookr.cloud to verify your client key',
+    'Visit https://zhook.dev to verify your client key',
 
   /** Message for account management */
   ACCOUNT_MANAGEMENT_MESSAGE:
-    'Visit https://hookr.cloud for account management',
+    'Visit https://zhook.dev for account management',
 } as const;
 
 /**

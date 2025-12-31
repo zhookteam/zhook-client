@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import WebSocket from 'ws';
-import { HookRClient } from '../../src/client';
+import { ZhookClient } from '../../src/client';
 
 // Mock WebSocket
 vi.mock('ws', () => {
@@ -18,17 +18,17 @@ vi.mock('ws', () => {
 });
 
 describe('WebSocket Connection Management', () => {
-  let client: HookRClient;
+  let client: ZhookClient;
   let mockWs: any;
   let consoleSpy: any;
 
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
-    
+
     // Mock console.log to capture log output
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    
+    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => { });
+
     // Create mock WebSocket instance
     mockWs = {
       on: vi.fn(),
@@ -36,11 +36,11 @@ describe('WebSocket Connection Management', () => {
       removeAllListeners: vi.fn(),
       readyState: WebSocket.OPEN,
     };
-    
+
     // Make WebSocket constructor return our mock
     (WebSocket as any).mockImplementation(() => mockWs);
-    
-    client = new HookRClient('valid-client-key-123', { logLevel: 'silent' });
+
+    client = new ZhookClient('valid-client-key-123', { logLevel: 'silent' });
   });
 
   afterEach(() => {
@@ -59,7 +59,7 @@ describe('WebSocket Connection Management', () => {
       await client.connect();
 
       expect(WebSocket).toHaveBeenCalledWith(
-        expect.stringContaining('wss://web.hookr.cloud/events?clientKey=valid-client-key-123')
+        expect.stringContaining('wss://web.zhook.dev/events?clientKey=valid-client-key-123')
       );
     });
 
@@ -76,7 +76,7 @@ describe('WebSocket Connection Management', () => {
 
     it('should reject promise on connection error', async () => {
       const testError = new Error('Connection failed');
-      
+
       mockWs.on.mockImplementation((event: string, callback: Function) => {
         if (event === 'error') {
           setTimeout(() => callback(testError), 0);
@@ -89,24 +89,24 @@ describe('WebSocket Connection Management', () => {
 
     it('should reject promise on connection timeout', async () => {
       // Don't trigger any events to simulate timeout
-      mockWs.on.mockImplementation(() => {});
+      mockWs.on.mockImplementation(() => { });
 
       // Use fake timers to control timeout
       vi.useFakeTimers();
-      
+
       const connectPromise = client.connect();
-      
+
       // Fast-forward past the timeout
       vi.advanceTimersByTime(10001);
-      
+
       await expect(connectPromise).rejects.toThrow('Connection timeout');
-      
+
       vi.useRealTimers();
     });
 
     it('should prevent connection when client is closed', async () => {
       client.close();
-      
+
       await expect(client.connect()).rejects.toThrow('Cannot connect: client has been closed');
     });
 
@@ -117,13 +117,13 @@ describe('WebSocket Connection Management', () => {
           setTimeout(() => callback(), 0);
         }
       });
-      
+
       await client.connect();
-      
+
       // Second connection attempt should not create new WebSocket
       const initialCallCount = (WebSocket as any).mock.calls.length;
       await client.connect();
-      
+
       expect((WebSocket as any).mock.calls.length).toBe(initialCallCount);
     });
   });
@@ -202,7 +202,7 @@ describe('WebSocket Connection Management', () => {
       messageHandler(JSON.stringify(unknownMessage));
 
       // Should not throw, just log warning
-      expect(() => {}).not.toThrow();
+      expect(() => { }).not.toThrow();
     });
 
     it('should isolate handler errors', () => {
@@ -344,10 +344,10 @@ describe('WebSocket Connection Management', () => {
       });
 
       await client.connect();
-      
+
       // Change WebSocket state to closed
       mockWs.readyState = WebSocket.CLOSED;
-      
+
       expect(() => client.close()).not.toThrow();
       expect(mockWs.removeAllListeners).toHaveBeenCalled();
       // close() should still be called even if WebSocket is already closed

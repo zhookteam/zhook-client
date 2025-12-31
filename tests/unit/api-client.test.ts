@@ -3,19 +3,19 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { HookRClient } from '../../src/client';
+import { ZhookClient } from '../../src/client';
 import type { HookConfig, Hook } from '../../src/types';
 
 // Mock global fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-describe('HookRClient - REST API', () => {
-  let client: HookRClient;
+describe('ZhookClient - REST API', () => {
+  let client: ZhookClient;
   const mockClientKey = 'test-client-key-12345';
 
   beforeEach(() => {
-    client = new HookRClient(mockClientKey, {
+    client = new ZhookClient(mockClientKey, {
       apiUrl: 'https://api.test.com/v1',
       logLevel: 'silent',
     });
@@ -65,7 +65,7 @@ describe('HookRClient - REST API', () => {
           headers: {
             'Authorization': `Bearer ${mockClientKey}`,
             'Content-Type': 'application/json',
-            'User-Agent': '@hookr/client/1.0.0',
+            'User-Agent': '@zhook/client/1.0.0',
           },
           body: JSON.stringify(validHookConfig),
         }
@@ -152,7 +152,7 @@ describe('HookRClient - REST API', () => {
           headers: {
             'Authorization': `Bearer ${mockClientKey}`,
             'Content-Type': 'application/json',
-            'User-Agent': '@hookr/client/1.0.0',
+            'User-Agent': '@zhook/client/1.0.0',
           },
         }
       );
@@ -197,7 +197,7 @@ describe('HookRClient - REST API', () => {
           headers: {
             'Authorization': `Bearer ${mockClientKey}`,
             'Content-Type': 'application/json',
-            'User-Agent': '@hookr/client/1.0.0',
+            'User-Agent': '@zhook/client/1.0.0',
           },
         }
       );
@@ -257,7 +257,7 @@ describe('HookRClient - REST API', () => {
           headers: {
             'Authorization': `Bearer ${mockClientKey}`,
             'Content-Type': 'application/json',
-            'User-Agent': '@hookr/client/1.0.0',
+            'User-Agent': '@zhook/client/1.0.0',
           },
           body: JSON.stringify(updateConfig),
         }
@@ -300,7 +300,7 @@ describe('HookRClient - REST API', () => {
           headers: {
             'Authorization': `Bearer ${mockClientKey}`,
             'Content-Type': 'application/json',
-            'User-Agent': '@hookr/client/1.0.0',
+            'User-Agent': '@zhook/client/1.0.0',
           },
         }
       );
@@ -360,7 +360,7 @@ describe('HookRClient - REST API', () => {
           headers: expect.objectContaining({
             'Authorization': `Bearer ${mockClientKey}`,
             'Content-Type': 'application/json',
-            'User-Agent': '@hookr/client/1.0.0',
+            'User-Agent': '@zhook/client/1.0.0',
           }),
         })
       );

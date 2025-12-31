@@ -2,14 +2,14 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { HookRClient } from './client.js';
+import { ZhookClient } from './client.js';
 import { EventLogger } from './event-logger.js';
 import { WEBSITE_CONFIG, WebsiteMessages } from './constants.js';
 
 const program = new Command();
 
 program
-  .name('hookr')
+  .name('zhook')
   .description(
     `Quick webhook listener via WebSocket - ${WEBSITE_CONFIG.FREE_FOR_DEVELOPERS_MESSAGE}`
   )
@@ -18,14 +18,14 @@ program
 program
   .command('listen')
   .description(
-    `Listen for incoming webhooks via hookR WebSocket. Get your free client key at ${WEBSITE_CONFIG.URL}`
+    `Listen for incoming webhooks via zhook WebSocket. Get your free client key at ${WEBSITE_CONFIG.URL}`
   )
   .option('-f, --format <format>', 'Output format (json|pretty)', 'pretty')
   .option('--save', 'Save requests to automatically named log file')
-  .option('--url <url>', 'hookR service URL', 'wss://web.hookr.cloud/events')
+  .option('--url <url>', 'zhook service URL', 'wss://web.zhook.dev/events')
   .argument(
     '<client-key>',
-    `Your hookR client API key (get one free at ${WEBSITE_CONFIG.URL})`
+    `Your zhook client API key (get one free at ${WEBSITE_CONFIG.URL})`
   )
   .action(async (clientKey, options) => {
     // Validate client key is provided
@@ -38,7 +38,7 @@ program
       process.exit(1);
     }
 
-    await listenToHookrService(clientKey, options);
+    await listenToZhookService(clientKey, options);
   });
 
 // Add custom help text with website information
@@ -46,8 +46,8 @@ program.addHelpText(
   'after',
   `
 Examples:
-  $ hookr listen your-client-key
-  $ hookr listen your-client-key --format json --save
+  $ zhook listen your-client-key
+  $ zhook listen your-client-key --format json --save
 
 ${WEBSITE_CONFIG.FREE_FOR_DEVELOPERS_MESSAGE}
 ${WEBSITE_CONFIG.GENERAL_HELP_MESSAGE}
@@ -63,8 +63,8 @@ program.version(
 ${WEBSITE_CONFIG.GENERAL_HELP_MESSAGE}`
 );
 
-async function listenToHookrService(clientKey: string, options: any) {
-  console.log(chalk.blue('🎣 Connecting to hookR service...'));
+async function listenToZhookService(clientKey: string, options: any) {
+  console.log(chalk.blue('🎣 Connecting to zhook service...'));
   console.log(chalk.gray(`   Client Key: ${clientKey.substring(0, 8)}...`));
   console.log(chalk.gray(`   Service URL: ${options.url}`));
   console.log('');
@@ -88,7 +88,7 @@ async function listenToHookrService(clientKey: string, options: any) {
   }
 
   try {
-    const client = new HookRClient(clientKey, {
+    const client = new ZhookClient(clientKey, {
       apiUrl: options.url
         .replace('wss://', 'https://')
         .replace('ws://', 'http://')
@@ -98,7 +98,7 @@ async function listenToHookrService(clientKey: string, options: any) {
 
     // Connect to WebSocket
     await client.connect();
-    console.log(chalk.green('✅ Connected to hookR service'));
+    console.log(chalk.green('✅ Connected to zhook service'));
     console.log(chalk.gray('Waiting for webhook events...'));
     console.log(chalk.gray('Press Ctrl+C to stop'));
     console.log('');

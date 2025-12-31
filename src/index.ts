@@ -1,14 +1,14 @@
 /**
- * hookR Client SDK
+ * Zhook Client SDK
  *
  * A lightweight, robust npm package that provides developers with a simple
- * interface to connect to the hookR webhook service.
+ * interface to connect to the Zhook webhook service.
  */
 
-export { HookRClient } from './client';
+export { ZhookClient } from './client';
 export { WEBSITE_CONFIG, WebsiteMessages } from './constants';
 export type {
-  HookRClientOptions,
+  ZhookClientOptions,
   WebhookEvent,
   ConnectionEvent,
   EventHandler,

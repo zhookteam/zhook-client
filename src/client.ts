@@ -1,14 +1,14 @@
 /**
- * Main HookRClient class
+ * Main ZhookClient class
  *
- * Provides a robust interface for connecting to the hookR webhook service
+ * Provides a robust interface for connecting to the zhook webhook service
  * with automatic reconnection, event handling, and hook management capabilities.
  */
 
 import WebSocket from 'ws';
 import { WEBSITE_CONFIG, WebsiteMessages } from './constants';
 import type {
-  HookRClientOptions,
+  ZhookClientOptions,
   EventHandler,
   ConnectionHandler,
   ErrorHandler,
@@ -44,9 +44,9 @@ interface HandlerEntry {
   handler: EventHandler | ConnectionHandler | ErrorHandler;
 }
 
-export class HookRClient {
+export class ZhookClient {
   private readonly clientKey: string;
-  private readonly options: Required<HookRClientOptions>;
+  private readonly options: Required<ZhookClientOptions>;
 
   // Internal state management
   private connectionState: ConnectionStateType = ConnectionState.DISCONNECTED;
@@ -58,13 +58,13 @@ export class HookRClient {
   private ws: WebSocket | null = null;
 
   /**
-   * Creates a new HookRClient instance
+   * Creates a new ZhookClient instance
    *
-   * @param clientKey - Authentication key for the hookR service
+   * @param clientKey - Authentication key for the zhook service
    * @param options - Optional configuration parameters
    * @throws {Error} If clientKey is invalid or options are malformed
    */
-  constructor(clientKey: string, options: HookRClientOptions = {}) {
+  constructor(clientKey: string, options: ZhookClientOptions = {}) {
     // Validate required parameters
     this.validateClientKey(clientKey);
     this.validateOptions(options);
@@ -72,7 +72,7 @@ export class HookRClient {
     this.clientKey = clientKey;
     this.options = this.mergeWithDefaults(options);
 
-    this.log('debug', '🔧 HookRClient initialized', {
+    this.log('debug', '🔧 ZhookClient initialized', {
       wsUrl: this.options.wsUrl,
       apiUrl: this.options.apiUrl,
       maxReconnectAttempts: this.options.maxReconnectAttempts,
@@ -108,7 +108,7 @@ export class HookRClient {
   /**
    * Validates the options parameter
    */
-  private validateOptions(options: HookRClientOptions): void {
+  private validateOptions(options: ZhookClientOptions): void {
     if (options.wsUrl !== undefined) {
       this.validateUrl(options.wsUrl, 'WebSocket URL');
     }
@@ -182,11 +182,11 @@ export class HookRClient {
    * Merges user options with defaults
    */
   private mergeWithDefaults(
-    options: HookRClientOptions
-  ): Required<HookRClientOptions> {
+    options: ZhookClientOptions
+  ): Required<ZhookClientOptions> {
     return {
-      wsUrl: options.wsUrl || 'wss://web.hookr.cloud/events',
-      apiUrl: options.apiUrl || 'https://web.hookr.cloud/api/v1',
+      wsUrl: options.wsUrl || 'wss://web.zhook.dev/events',
+      apiUrl: options.apiUrl || 'https://web.zhook.dev/api/v1',
       maxReconnectAttempts: options.maxReconnectAttempts ?? 10,
       reconnectDelay: options.reconnectDelay ?? 1000,
       logLevel: options.logLevel || 'info',
@@ -207,7 +207,7 @@ export class HookRClient {
 
     if (levels[level] <= levels[this.options.logLevel]) {
       const timestamp = new Date().toISOString();
-      const prefix = `[${timestamp}] [${level.toUpperCase()}] hookR-client:`;
+      const prefix = `[${timestamp}] [${level.toUpperCase()}] zhook-client:`;
 
       if (data) {
         console.log(prefix, message, data);
@@ -234,14 +234,14 @@ export class HookRClient {
   /**
    * Gets the current configuration
    */
-  public getConfig(): Readonly<Required<HookRClientOptions>> {
+  public getConfig(): Readonly<Required<ZhookClientOptions>> {
     return { ...this.options };
   }
 
   // Connection management methods
 
   /**
-   * Establishes a WebSocket connection to the hookR service
+   * Establishes a WebSocket connection to the zhook service
    *
    * @returns Promise that resolves when connection is established
    * @throws {Error} If connection fails or client is already closed
@@ -252,11 +252,11 @@ export class HookRClient {
     }
 
     if (this.connectionState === ConnectionState.CONNECTED) {
-      this.log('warn', '⚠️ Already connected to hookR service');
+      this.log('warn', '⚠️ Already connected to zhook service');
       return;
     }
 
-    this.log('info', '🔌 Connecting to hookR service...');
+    this.log('info', '🔌 Connecting to zhook service...');
     this.connectionState = ConnectionState.CONNECTING;
 
     return new Promise((resolve, reject) => {
@@ -347,7 +347,7 @@ export class HookRClient {
       return;
     }
 
-    this.log('info', '👋 Closing hookR client...');
+    this.log('info', '👋 Closing zhook client...');
     this.isClosed = true;
     this.connectionState = ConnectionState.CLOSED;
 
@@ -827,7 +827,7 @@ export class HookRClient {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.clientKey}`,
       'Content-Type': 'application/json',
-      'User-Agent': '@hookr/client/1.0.0',
+      'User-Agent': '@zhook/client/1.0.0',
     };
 
     const requestOptions: any = {

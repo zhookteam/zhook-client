@@ -1,12 +1,12 @@
-# @hookr/client
+# @zhook/client
 
-[![npm version](https://badge.fury.io/js/@hookr%2Fclient.svg)](https://badge.fury.io/js/@hookr%2Fclient)
+[![npm version](https://badge.fury.io/js/@zhook%2Fclient.svg)](https://badge.fury.io/js/@zhook%2Fclient)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
 
-Official JavaScript/TypeScript client for the hookR webhook service. The client handles WebSocket connections for real-time event delivery, REST API interactions for hook management, and includes comprehensive error handling with automatic reconnection capabilities.
+Official JavaScript/TypeScript client for the zhook webhook service. The client handles WebSocket connections for real-time event delivery, REST API interactions for hook management, and includes comprehensive error handling with automatic reconnection capabilities.
 
-**🎉 hookR is free for developers!** Get your client key at [https://hookr.cloud](https://hookr.cloud) and start receiving webhooks in seconds.
+**🎉 zhook is free for developers!** Get your client key at [https://zhook.dev](https://zhook.dev) and start receiving webhooks in seconds.
 
 ## Features
 
@@ -18,28 +18,29 @@ Official JavaScript/TypeScript client for the hookR webhook service. The client 
 - 📦 **Dual module support** (CommonJS and ES modules)
 - 🔷 **Full TypeScript support** with complete type definitions
 - 🎯 **Node.js 16+** compatibility
+- 📡 **HTTP to MQTT** - zhook can also trigger MQTT messages giving developers HTTP to MQTT capabilities, check out destinations on your zhook.dev dashboard
 
 ## Getting Started
 
-hookR is **free for developers** - no credit card required! Simply:
+zhook is **free for developers** - no credit card required! Simply:
 
-1. **Start** Get your free client key at [https://hookr.cloud](https://hookr.cloud)
+1. **Start** Get your free client key at [https://zhook.dev](https://zhook.dev)
 2. **Install** the client library
 3. **Receive** receiving webhooks instantly
 
 ## Installation
 
 ```bash
-npm install @hookr/client
+npm install @zhook/client
 ```
 
 ## Quick Start
 
 ```javascript
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
-// Create a new client instance with your free client key from https://hookr.cloud
-const client = new HookRClient('your-client-key');
+// Create a new client instance with your free client key from https://zhook.dev
+const client = new ZhookClient('your-client-key');
 
 // Register an event handler
 client.onHookCalled((event) => {
@@ -58,40 +59,40 @@ The package also includes a CLI tool for quickly testing webhook connections fro
 
 ```bash
 # Install globally for CLI access
-npm install -g @hookr/client
+npm install -g @zhook/client
 ```
 
 ### Usage
 
-Get your free client key at [https://hookr.cloud](https://hookr.cloud), then:
+Get your free client key at [https://zhook.dev](https://zhook.dev), then:
 
 ```bash
 # Listen for webhooks in real-time
-hookr listen your-client-key
+zhook listen your-client-key
 
 # Use JSON output format
-hookr listen your-client-key --format json
+zhook listen your-client-key --format json
 
 # Save webhooks to automatically named log file
-hookr listen your-client-key --save
+zhook listen your-client-key --save
 
 # Combine file logging with pretty console output
-hookr listen your-client-key --save --format pretty
+zhook listen your-client-key --save --format pretty
 
-# Connect to custom hookR instance
-hookr listen your-client-key --url wss://your-instance.com/events
+# Connect to custom zhook instance
+zhook listen your-client-key --url wss://your-instance.com/events
 ```
 
 ### Example Output
 
 ```
-🎣 Connecting to hookR service...
+🎣 Connecting to zhook service...
    Client Key: abc123...
-   Service URL: wss://web.hookr.cloud/events
+   Service URL: wss://web.zhook.dev/events
 
-📁 Logging events to: hookr-logs-2025-12-11T14-32-15-123Z.json
+📁 Logging events to: zhook-logs-2025-12-11T14-32-15-123Z.json
 
-✅ Connected to hookR service
+✅ Connected to zhook service
 Waiting for webhook events...
 Press Ctrl+C to stop
 
@@ -117,11 +118,11 @@ The CLI can automatically save all incoming webhook events to timestamped log fi
 
 ```bash
 # Enable automatic file logging
-hookr listen your-client-key --save
+zhook listen your-client-key --save
 ```
 
 When using `--save`, the CLI will:
-- 📁 **Auto-generate filenames** like `hookr-logs-2025-12-11T14-32-15-123Z.json`
+- 📁 **Auto-generate filenames** like `zhook-logs-2025-12-11T14-32-15-123Z.json`
 - 📝 **Save in JSONL format** (one JSON event per line)
 - 🔄 **Work with any output format** (`--format pretty` or `--format json`)
 - 📊 **Show total events logged** when you exit with Ctrl+C
@@ -135,13 +136,13 @@ When using `--save`, the CLI will:
 The JSONL format makes it easy to process with tools like `jq`:
 ```bash
 # Count total events
-cat hookr-logs-*.json | wc -l
+cat zhook-logs-*.json | wc -l
 
 # Filter events by type
-cat hookr-logs-*.json | jq 'select(.payload.event == "user.created")'
+cat zhook-logs-*.json | jq 'select(.payload.event == "user.created")'
 
 # Extract all payloads
-cat hookr-logs-*.json | jq '.payload'
+cat zhook-logs-*.json | jq '.payload'
 ```
 
 ### CLI Options
@@ -150,12 +151,12 @@ cat hookr-logs-*.json | jq '.payload'
 |--------|-------------|---------|
 | `--format <format>` | Output format (`json` or `pretty`) | `pretty` |
 | `--save` | Save events to automatically named log file | `false` |
-| `--url <url>` | hookR service WebSocket URL | `wss://web.hookr.cloud/events` |
+| `--url <url>` | zhook service WebSocket URL | `wss://web.zhook.dev/events` |
 
 The CLI tool is perfect for:
 - 🧪 **Testing webhook connections** during development
 - 🔍 **Debugging webhook payloads** in real-time  
-- 🚀 **Quick validation** of your hookR setup
+- 🚀 **Quick validation** of your zhook setup
 - 📊 **Monitoring webhook traffic** from the terminal
 - 💾 **Logging webhook events** for offline analysis
 
@@ -163,16 +164,16 @@ The CLI tool is perfect for:
 
 ### Basic Connection
 
-First, get your free client key at [https://hookr.cloud](https://hookr.cloud):
+First, get your free client key at [https://zhook.dev](https://zhook.dev):
 
 ```javascript
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
-// Use your free client key from https://hookr.cloud
-const client = new HookRClient('your-client-key', {
+// Use your free client key from https://zhook.dev
+const client = new ZhookClient('your-client-key', {
   // Optional configuration
-  wsUrl: 'wss://your-hookr-instance.com/events',
-  apiUrl: 'https://your-hookr-instance.com/api/v1',
+  wsUrl: 'wss://your-zhook-instance.com/events',
+  apiUrl: 'https://your-zhook-instance.com/api/v1',
   maxReconnectAttempts: 10,
   reconnectDelay: 1000,
   logLevel: 'info'
@@ -180,7 +181,7 @@ const client = new HookRClient('your-client-key', {
 
 try {
   await client.connect();
-  console.log('Connected to hookR!');
+  console.log('Connected to zhook!');
 } catch (error) {
   console.error('Connection failed:', error);
 }
@@ -243,7 +244,7 @@ try {
   await client.connect();
 } catch (error) {
   if (error.message.includes('authentication')) {
-    console.error('Invalid client key - visit https://hookr.cloud to manage your API keys');
+    console.error('Invalid client key - visit https://zhook.dev to manage your API keys');
   } else {
     console.error('Connection error:', error.message);
   }
@@ -273,8 +274,8 @@ client.close();
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `wsUrl` | `string` | `wss://web.hookr.cloud/events` | WebSocket server URL |
-| `apiUrl` | `string` | `https://web.hookr.cloud/api/v1` | REST API base URL |
+| `wsUrl` | `string` | `wss://web.zhook.dev/events` | WebSocket server URL |
+| `apiUrl` | `string` | `https://web.zhook.dev/api/v1` | REST API base URL |
 | `maxReconnectAttempts` | `number` | `10` | Maximum reconnection attempts |
 | `reconnectDelay` | `number` | `1000` | Initial reconnection delay (ms) |
 | `logLevel` | `'silent' \| 'error' \| 'warn' \| 'info' \| 'debug'` | `'info'` | Logging verbosity |
@@ -306,10 +307,10 @@ The SDK supports both ES modules and CommonJS:
 
 ```javascript
 // ES modules
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
 // CommonJS
-const { HookRClient } = require('@hookr/client');
+const { ZhookClient } = require('@zhook/client');
 ```
 
 ## Examples
@@ -318,11 +319,11 @@ const { HookRClient } = require('@hookr/client');
 
 ```javascript
 import express from 'express';
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
 const app = express();
-// Get your free client key from https://hookr.cloud
-const client = new HookRClient(process.env.HOOKR_CLIENT_KEY);
+// Get your free client key from https://zhook.dev
+const client = new ZhookClient(process.env.ZHOOK_CLIENT_KEY);
 
 client.onHookCalled((event) => {
   // Process webhook event
@@ -342,11 +343,11 @@ app.listen(3000);
 
 ```javascript
 // pages/api/webhooks/setup.js
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
 export default async function handler(req, res) {
-  // Get your free client key from https://hookr.cloud
-  const client = new HookRClient(process.env.HOOKR_CLIENT_KEY);
+  // Get your free client key from https://zhook.dev
+  const client = new ZhookClient(process.env.ZHOOK_CLIENT_KEY);
   
   try {
     const hook = await client.createHook({
@@ -376,7 +377,7 @@ The SDK provides descriptive error messages for common scenarios:
 ### Building from Source
 
 ```bash
-git clone https://github.com/hookrteam/client.git
+git clone https://github.com/zhookteam/zhook-client.git
 cd client
 npm install
 npm run build
@@ -401,7 +402,7 @@ npm run format          # Format code with Prettier
 ## Requirements
 
 - Node.js 16.0.0 or higher
-- A valid hookR client key (get yours free at [https://hookr.cloud](https://hookr.cloud))
+- A valid zhook client key (get yours free at [https://zhook.dev](https://zhook.dev))
 
 ## License
 
@@ -409,9 +410,9 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 
-- 📖 [Documentation](https://github.com/hookrteam/client#readme)
-- 🐛 [Issue Tracker](https://github.com/hookrteam/client/issues)
-- 💬 [Discussions](https://github.com/hookrteam/client/discussions)
+- 📖 [Documentation](https://github.com/zhookteam/zhook-client#readme)
+- 🐛 [Issue Tracker](https://github.com/zhookteam/zhook-client/issues)
+- 💬 [Discussions](https://github.com/zhookteam/zhook-client/discussions)
 
 ## Contributing
 
@@ -419,4 +420,4 @@ Contributions are welcome! Please read our contributing guidelines and submit pu
 
 ---
 
-Made with ❤️ by the hookR Team
+Made with ❤️ by the zhook Team
