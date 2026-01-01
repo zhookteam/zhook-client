@@ -1,16 +1,16 @@
 /**
  * Hook Management Example
  * 
- * This example demonstrates how to use the hookR Client SDK to manage
+ * This example demonstrates how to use the zhook Client SDK to manage
  * webhook hooks through the REST API.
  */
 
-const { HookRClient } = require('@hookr/client');
+const { ZhookClient } = require('@zhook/client');
 
 async function hookManagementExample() {
   // Initialize the client
-  const client = new HookRClient('your-client-key-here', {
-    apiUrl: 'https://hookr-production.up.railway.app/api/v1',
+  const client = new ZhookClient('your-client-key-here', {
+    apiUrl: 'https://zhook.dev/api/v1',
     logLevel: 'info'
   });
 
@@ -24,7 +24,7 @@ async function hookManagementExample() {
       url: 'https://your-app.com/webhooks/users',
       events: ['user.created', 'user.updated', 'user.deleted'],
       headers: {
-        'X-Webhook-Source': 'hookr',
+        'X-Webhook-Source': 'zhook',
         'Authorization': 'Bearer your-webhook-secret'
       },
       retryPolicy: {
@@ -77,7 +77,7 @@ async function hookManagementExample() {
 
   } catch (error) {
     console.error('❌ Error during hook management:', error.message);
-    
+
     // Handle specific API errors
     if (error.status) {
       console.error(`   HTTP Status: ${error.status}`);

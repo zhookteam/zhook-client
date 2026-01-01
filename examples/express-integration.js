@@ -1,12 +1,12 @@
 /**
  * Express.js Integration Example
  * 
- * This example shows how to integrate the hookR Client SDK with an Express.js application.
+ * This example shows how to integrate the zhook Client SDK with an Express.js application.
  * It demonstrates webhook processing alongside HTTP endpoints.
  */
 
 import express from 'express';
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,17 +18,17 @@ app.use(express.json());
 const webhookEvents = [];
 const users = new Map();
 
-// Initialize hookR client
-const hookrClient = new HookRClient(process.env.HOOKR_CLIENT_KEY || 'your-client-key', {
+// Initialize zhook client
+const zhookClient = new ZhookClient(process.env.ZHOOK_CLIENT_KEY || 'your-client-key', {
   logLevel: 'info',
   maxReconnectAttempts: 10,
   reconnectDelay: 1000
 });
 
 // Webhook event handlers
-hookrClient.onHookCalled((event) => {
+zhookClient.onHookCalled((event) => {
   console.log(`📨 Webhook received: ${event.eventId}`);
-  
+
   // Store the event
   webhookEvents.push({
     id: event.eventId,
@@ -42,12 +42,12 @@ hookrClient.onHookCalled((event) => {
   handleWebhookEvent(event.payload);
 });
 
-hookrClient.onConnected((event) => {
-  console.log(`✅ Connected to hookR with client ID: ${event.clientId}`);
+zhookClient.onConnected((event) => {
+  console.log(`✅ Connected to zhook with client ID: ${event.clientId}`);
 });
 
-hookrClient.onError((error) => {
-  console.error('❌ hookR error:', error.message);
+zhookClient.onError((error) => {
+  console.error('❌ zhook error:', error.message);
 });
 
 function handleWebhookEvent(payload) {
@@ -94,9 +94,9 @@ function handlePaymentCompleted(paymentData) {
 // REST API endpoints
 app.get('/', (req, res) => {
   res.json({
-    message: 'hookR Express Integration Example',
+    message: 'zhook Express Integration Example',
     status: 'running',
-    hookrConnected: hookrClient.isConnected(),
+    zhookConnected: zhookClient.isConnected(),
     stats: {
       webhooksReceived: webhookEvents.length,
       usersTracked: users.size
@@ -131,22 +131,22 @@ app.get('/users/:id', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
-    hookr: {
-      connected: hookrClient.isConnected(),
-      state: hookrClient.getConnectionState(),
-      clientId: hookrClient.getClientId()
+    zhook: {
+      connected: zhookClient.isConnected(),
+      state: zhookClient.getConnectionState(),
+      clientId: zhookClient.getClientId()
     },
     uptime: process.uptime(),
     timestamp: new Date().toISOString()
   });
 });
 
-// Start the server and connect to hookR
+// Start the server and connect to zhook
 async function startServer() {
   try {
-    // Connect to hookR first
-    await hookrClient.connect();
-    console.log('🔌 Connected to hookR service');
+    // Connect to zhook first
+    await zhookClient.connect();
+    console.log('🔌 Connected to zhook service');
 
     // Start Express server
     app.listen(port, () => {
@@ -164,13 +164,13 @@ async function startServer() {
 // Graceful shutdown
 process.on('SIGINT', () => {
   console.log('\n👋 Shutting down gracefully...');
-  hookrClient.close();
+  zhookClient.close();
   process.exit(0);
 });
 
 process.on('SIGTERM', () => {
   console.log('\n👋 Received SIGTERM, shutting down...');
-  hookrClient.close();
+  zhookClient.close();
   process.exit(0);
 });
 

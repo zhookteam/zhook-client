@@ -1,11 +1,11 @@
-# @hookr/client Examples
+# @zhook/client Examples
 
-This directory contains practical examples demonstrating how to use the @hookr/client package in various scenarios. Each example is self-contained and includes detailed comments explaining the implementation.
+This directory contains practical examples demonstrating how to use the @zhook/client package in various scenarios. Each example is self-contained and includes detailed comments explaining the implementation.
 
 ## Examples Overview
 
 ### 1. Basic Usage (`basic-usage.js`)
-**Perfect for beginners** - Shows the fundamental usage pattern of the @hookr/client.
+**Perfect for beginners** - Shows the fundamental usage pattern of the @zhook/client.
 
 **Features:**
 - Simple client setup and connection
@@ -113,19 +113,19 @@ node examples/complete-workflow.js
 ## Prerequisites
 
 ### Environment Variables
-Set your hookR client key as an environment variable:
+Set your zhook client key as an environment variable:
 
 ```bash
-export HOOKR_CLIENT_KEY="your-actual-client-key-here"
+export ZHOOK_CLIENT_KEY="your-actual-client-key-here"
 ```
 
 Or create a `.env` file:
 ```
-HOOKR_CLIENT_KEY=your-actual-client-key-here
+ZHOOK_CLIENT_KEY=your-actual-client-key-here
 ```
 
 ### Dependencies
-Most examples use only the @hookr/client, but some require additional packages:
+Most examples use only the @zhook/client, but some require additional packages:
 
 ```bash
 # For Express.js integration
@@ -143,9 +143,9 @@ npm install dotenv
 
 ### Basic Connection Pattern
 ```javascript
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
-const client = new HookRClient('your-client-key', {
+const client = new ZhookClient('your-client-key', {
   logLevel: 'info',
   maxReconnectAttempts: 10,
   reconnectDelay: 2000
@@ -205,7 +205,7 @@ await client.updateHook(hook.id, {
 Begin with the `basic-usage.js` example to ensure your client key works and you can connect to the service.
 
 ### 2. Test Webhook Processing
-Use the webhook testing tools in your hookR dashboard to send test events and verify your handlers are working correctly.
+Use the webhook testing tools in your zhook dashboard to send test events and verify your handlers are working correctly.
 
 ### 3. Test Error Scenarios
 The `error-handling.js` example includes simulation of various error conditions. Use it to test your error handling logic.
@@ -244,9 +244,9 @@ For production deployments, test with higher webhook volumes to ensure your proc
 If you encounter issues with these examples:
 
 1. Check that your client key is valid and properly set
-2. Verify network connectivity to the hookR service
+2. Verify network connectivity to the zhook service
 3. Review the console output for error messages
-4. Check the hookR dashboard for connection status
+4. Check the zhook dashboard for connection status
 5. Refer to the main SDK documentation
 
-For additional support, please refer to the main README or contact support through the hookR dashboard.
+For additional support, please refer to the main README or contact support through the zhook dashboard.

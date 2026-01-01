@@ -1,15 +1,15 @@
 /**
  * Basic Usage Example
  * 
- * This example shows the most common usage pattern for the hookR Client SDK.
+ * This example shows the most common usage pattern for the zhook Client SDK.
  * It demonstrates connecting to the service, handling events, and basic error handling.
  */
 
-import { HookRClient } from '@hookr/client';
+import { ZhookClient } from '@zhook/client';
 
 async function basicExample() {
   // Create a new client instance
-  const client = new HookRClient('your-client-key-here', {
+  const client = new ZhookClient('your-client-key-here', {
     // Optional configuration
     logLevel: 'info',
     maxReconnectAttempts: 5,
@@ -22,13 +22,13 @@ async function basicExample() {
     console.log('Event ID:', event.eventId);
     console.log('Hook ID:', event.hookId);
     console.log('Payload:', JSON.stringify(event.payload, null, 2));
-    
+
     // Process your webhook data here
     processWebhookData(event.payload);
   });
 
   client.onConnected((event) => {
-    console.log('✅ Connected to hookR!');
+    console.log('✅ Connected to zhook!');
     console.log('Client ID:', event.clientId);
   });
 
@@ -37,13 +37,13 @@ async function basicExample() {
   });
 
   try {
-    // Connect to the hookR service
+    // Connect to the zhook service
     await client.connect();
-    console.log('🔌 Successfully connected to hookR service');
-    
+    console.log('🔌 Successfully connected to zhook service');
+
     // Keep the process running
     console.log('👂 Listening for webhooks... Press Ctrl+C to exit');
-    
+
   } catch (error) {
     console.error('Failed to connect:', error.message);
     process.exit(1);

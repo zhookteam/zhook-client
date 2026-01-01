@@ -1,7 +1,7 @@
 {
-  "name": "hookr-client-sdk-examples",
+  "name": "zhook-client-sdk-examples",
   "version": "1.0.0",
-  "description": "Examples for the hookR Client SDK",
+  "description": "Examples for the zhook Client SDK",
   "type": "module",
   "scripts": {
     "basic": "node basic-usage.js",
@@ -23,11 +23,11 @@
     "dotenv": "^16.3.1"
   },
   "keywords": [
-    "hookr",
+    "zhook",
     "webhook",
     "examples",
     "sdk"
   ],
-  "author": "hookR Team",
+  "author": "zhook Team",
   "license": "MIT"
 }

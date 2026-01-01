@@ -1,20 +1,20 @@
 /**
  * Complete Workflow Example
  * 
- * This example demonstrates a complete workflow using the hookR Client SDK:
+ * This example demonstrates a complete workflow using the zhook Client SDK:
  * 1. Create hooks via REST API
  * 2. Connect via WebSocket to receive events
  * 3. Handle incoming webhook events
  * 4. Manage hooks dynamically
  */
 
-const { HookRClient } = require('@hookr/client');
+const { ZhookClient } = require('@zhook/client');
 
 async function completeWorkflowExample() {
   // Initialize the client
-  const client = new HookRClient('your-client-key-here', {
-    wsUrl: 'wss://hookr-production.up.railway.app/events',
-    apiUrl: 'https://hookr-production.up.railway.app/api/v1',
+  const client = new ZhookClient('your-client-key-here', {
+    wsUrl: 'wss://web.zhook.dev/events',
+    apiUrl: 'https://zhook.dev/api/v1',
     logLevel: 'info',
     maxReconnectAttempts: 5,
     reconnectDelay: 2000
@@ -28,9 +28,9 @@ async function completeWorkflowExample() {
 
     // Step 1: Set up event handlers
     console.log('📡 Setting up event handlers...');
-    
+
     client.onConnected((event) => {
-      console.log('✅ Connected to hookR service!');
+      console.log('✅ Connected to zhook service!');
       console.log(`   Client ID: ${event.clientId}`);
       console.log(`   Message: ${event.message}`);
     });
@@ -53,13 +53,13 @@ async function completeWorkflowExample() {
 
     // Step 3: Create hooks via REST API
     console.log('\n📝 Creating webhook hooks...');
-    
+
     const userHook = await client.createHook({
       name: 'User Management Hook',
       url: 'https://your-app.com/webhooks/users',
       events: ['user.created', 'user.updated'],
       headers: {
-        'X-Webhook-Source': 'hookr',
+        'X-Webhook-Source': 'zhook',
         'Content-Type': 'application/json'
       }
     });
@@ -123,7 +123,7 @@ async function completeWorkflowExample() {
   } finally {
     // Cleanup: Close connection and optionally delete test hooks
     console.log('\n🧹 Cleaning up...');
-    
+
     client.close();
     console.log('✅ WebSocket connection closed');
 

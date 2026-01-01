@@ -1,18 +1,18 @@
 /**
  * TypeScript Usage Example
  * 
- * This example demonstrates how to use the hookR Client SDK with TypeScript,
+ * This example demonstrates how to use the zhook Client SDK with TypeScript,
  * including proper typing, interfaces, and error handling.
  */
 
-import { 
-  HookRClient, 
-  WebhookEvent, 
-  ConnectionEvent, 
-  HookConfig, 
+import {
+  ZhookClient,
+  WebhookEvent,
+  ConnectionEvent,
+  HookConfig,
   Hook,
-  HookRClientOptions 
-} from '@hookr/client';
+  ZhookClientOptions
+} from '@zhook/client';
 
 // Define custom interfaces for your application
 interface UserCreatedPayload {
@@ -44,11 +44,11 @@ interface OrderCompletedPayload {
 type CustomWebhookPayload = UserCreatedPayload | OrderCompletedPayload;
 
 class WebhookProcessor {
-  private client: HookRClient;
+  private client: ZhookClient;
   private processedEvents: Map<string, Date> = new Map();
 
-  constructor(clientKey: string, options?: HookRClientOptions) {
-    this.client = new HookRClient(clientKey, {
+  constructor(clientKey: string, options?: ZhookClientOptions) {
+    this.client = new ZhookClient(clientKey, {
       logLevel: 'info',
       maxReconnectAttempts: 5,
       reconnectDelay: 2000,
@@ -84,12 +84,12 @@ class WebhookProcessor {
     }
 
     this.processedEvents.set(event.eventId, new Date());
-    
+
     console.log(`📨 Processing webhook: ${event.eventId}`);
-    
+
     try {
       const payload = event.payload as CustomWebhookPayload;
-      
+
       switch (payload.type) {
         case 'user.created':
           this.handleUserCreated(payload.data, event);
@@ -107,7 +107,7 @@ class WebhookProcessor {
 
   private handleUserCreated(userData: UserCreatedPayload['data'], event: WebhookEvent): void {
     console.log(`👤 New user created: ${userData.email}`);
-    
+
     // Type-safe data access
     const user = {
       id: userData.id,
@@ -125,14 +125,14 @@ class WebhookProcessor {
 
   private handleOrderCompleted(orderData: OrderCompletedPayload['data'], event: WebhookEvent): void {
     console.log(`🛒 Order completed: ${orderData.orderId} for $${orderData.amount}`);
-    
+
     // Calculate total with type safety
     const calculatedTotal = orderData.items.reduce((sum, item) => {
       return sum + (item.price * item.quantity);
     }, 0);
 
     console.log(`💰 Order total: $${calculatedTotal} ${orderData.currency}`);
-    
+
     // Your business logic here
     this.fulfillOrder(orderData);
     this.sendOrderConfirmation(orderData);
@@ -170,7 +170,7 @@ class WebhookProcessor {
   public async connect(): Promise<void> {
     try {
       await this.client.connect();
-      console.log('🔌 Connected to hookR service');
+      console.log('🔌 Connected to zhook service');
     } catch (error) {
       console.error('Failed to connect:', error);
       throw error;
@@ -179,7 +179,7 @@ class WebhookProcessor {
 
   public disconnect(): void {
     this.client.close();
-    console.log('👋 Disconnected from hookR service');
+    console.log('👋 Disconnected from zhook service');
   }
 
   public isConnected(): boolean {
@@ -201,7 +201,7 @@ class WebhookProcessor {
       events: ['user.created', 'user.updated', 'user.deleted'],
       headers: {
         'Content-Type': 'application/json',
-        'X-Webhook-Source': '@hookr/client'
+        'X-Webhook-Source': '@zhook/client'
       }
     };
 
@@ -229,10 +229,10 @@ class WebhookProcessor {
 
 // Usage example
 async function main(): Promise<void> {
-  const clientKey = process.env.HOOKR_CLIENT_KEY;
-  
+  const clientKey = process.env.ZHOOK_CLIENT_KEY;
+
   if (!clientKey) {
-    console.error('❌ HOOKR_CLIENT_KEY environment variable is required');
+    console.error('❌ ZHOOK_CLIENT_KEY environment variable is required');
     process.exit(1);
   }
 
@@ -248,10 +248,10 @@ async function main(): Promise<void> {
     // Create hooks if needed
     if (process.argv.includes('--setup-hooks')) {
       console.log('🔧 Setting up hooks...');
-      
+
       const userHook = await processor.createUserHook('https://myapp.com/webhooks/users');
       console.log(`✅ User hook created: ${userHook.id}`);
-      
+
       const orderHook = await processor.createOrderHook('https://myapp.com/webhooks/orders');
       console.log(`✅ Order hook created: ${orderHook.id}`);
     }
@@ -262,7 +262,7 @@ async function main(): Promise<void> {
 
     // Keep the process running
     console.log('👂 Listening for webhooks... Press Ctrl+C to exit');
-    
+
     // Log stats periodically
     setInterval(() => {
       const stats = processor.getStats();

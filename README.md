@@ -285,9 +285,9 @@ client.close();
 The SDK is written in TypeScript and provides complete type definitions:
 
 ```typescript
-import { HookRClient, HookConfig, WebhookEvent } from '@hookr/client';
+import { ZhookClient, HookConfig, WebhookEvent } from '@zhook/client';
 
-const client: HookRClient = new HookRClient('key');
+const client: ZhookClient = new ZhookClient('key');
 
 const hookConfig: HookConfig = {
   name: 'My Hook',
